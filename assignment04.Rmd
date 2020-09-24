@@ -10,7 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 source: <https://www.aiddata.org/data/chinese-global-official-finance-dataset>
 
-```{r eval=FALSE}
+```{r}
 
 library(tidyverse)
 BRI <- read_csv("GlobalChineseOfficialFinanceDataset_v1.0.csv")
@@ -18,10 +18,64 @@ BRI <- read_csv("GlobalChineseOfficialFinanceDataset_v1.0.csv")
 ```
 
 
-## Visualization #1
 
-```{r pressure, echo=TRUE}
-plot(pressure)
+# Visualization #1 - Africa
+```{r Africa}
+
+Africa <- BRI %>%
+  select(year, recipient_region, usd_current) %>%
+  filter(recipient_region == "Africa") %>%
+  arrange(year) %>%
+  select(year, usd_current)
+
+```
+
+
+
+## Visualization #2 - Asia
+```{r Asia}
+
+Asia <- BRI %>%
+  select(year, recipient_region, usd_current) %>%
+  filter(recipient_region == "Asia") %>%
+  arrange(year) %>%
+  select(year, usd_current)
+
+```
+
+
+
+
+## Visualization #3 - The Middle East
+```{r The Middle East}
+
+Middle_East <- BRI %>% 
+  select(year, recipient_region, usd_current) %>%
+  filter(recipient_region == "Middle East") %>%
+  arrange(year) %>%
+  select(year, usd_current)
+
+```
+
+
+## Visualization #4 - The Pacific 
+
+```{r The Pacific Region}
+
+The_Pacific <- BRI %>%
+  select(year, recipient_region, usd_current) %>%
+  filter(recipient_region == "The Pacific") %>%
+  arrange(year) %>%
+  select(year, usd_current) 
+
+The_Pacific_Avg <- The_Pacific %>%
+  group_by(year) %>%
+  summarize(usd_current = sum(usd_current, na.rm =TRUE))
+
+The_Pacific_Avg %>%
+  ggplot() +
+  geom_point(mapping = aes(x = year, y = usd_current))
+
 ```
 
 
