@@ -6,18 +6,16 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, error = FALSE, messge = FALSE)
 ```
 source: <https://www.aiddata.org/data/chinese-global-official-finance-dataset>
 
-```{r}
+```{r, include = FALSE}
 
 library(tidyverse)
 BRI <- read_csv("GlobalChineseOfficialFinanceDataset_v1.0.csv")
 
 ```
-
-
 
 # Visualization #1 - Africa
 ```{r Africa}
@@ -27,6 +25,7 @@ Africa <- BRI %>%
   filter(recipient_region == "Africa") %>%
   arrange(year) %>%
   select(year, usd_current)
+
 
 ```
 
@@ -70,11 +69,16 @@ The_Pacific <- BRI %>%
 
 The_Pacific_Avg <- The_Pacific %>%
   group_by(year) %>%
-  summarize(usd_current = sum(usd_current, na.rm =TRUE))
+  summarize(usd_current = sum(usd_current, na.rm =TRUE)) %>%
+  mutate(usd_current2 = usd_current/10000) 
 
 The_Pacific_Avg %>%
   ggplot() +
-  geom_point(mapping = aes(x = year, y = usd_current))
+  geom_point(aes(x = year, y = usd_current2), color = "blue") +
+  geom_smooth(aes(x = year, y = usd_current2)) +
+  scale_x_continuous(breaks = seq(2000, 2014, by = 1)) +
+  scale_y_continuous(breaks = seq(700, 77000, by = 7000)) +
+  theme(axis.text.x = element_text (face = "bold", size = 10, angle = 45))
 
 ```
 
