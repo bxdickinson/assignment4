@@ -1,6 +1,6 @@
 ---
-title: "assignment04"
-author: "BD"
+title: "Exploring China's Belt and Road Initiative Through Visualizations"
+author: "Bethany Dickinson"
 date: "9/24/2020"
 output: html_document
 ---
@@ -8,20 +8,20 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+source: <https://www.aiddata.org/data/chinese-global-official-finance-dataset>
 
-## R Markdown
+```{r eval=FALSE}
 
+library(tidyverse)
+BRI <- read_csv("GlobalChineseOfficialFinanceDataset_v1.0.csv")
 
-```{r cars}
-summary(cars)
 ```
 
-## Including Plots
 
-You can also embed plots, for example:
+## Visualization #1
 
-```{r pressure, echo=FALSE}
+```{r pressure, echo=TRUE}
 plot(pressure)
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
