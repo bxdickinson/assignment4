@@ -10,7 +10,7 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE, error = FALSE)
 ```
 source: <https://www.aiddata.org/data/chinese-global-official-finance-dataset>
 
-```{r, include = FALSE}
+```{r, include = TRUE}
 
 library(tidyverse)
 BRI <- read_csv("GlobalChineseOfficialFinanceDataset_v1.0.csv")
@@ -101,7 +101,7 @@ The_Pacific_Avg <- The_Pacific %>%
 
 The_Pacific_Avg %>%
   ggplot() +
-  geom_point(aes(x = year, y = usd_current2), color = "blue") +
+  geom_point(aes(x = year, y = usd_current2), color = "blue", shape = "triangle") +
   geom_smooth(aes(x = year, y = usd_current2)) +
   scale_x_continuous(breaks = seq(2000, 2014, by = 1)) +
   scale_y_continuous(breaks = seq(700, 77000, by = 7000)) +
