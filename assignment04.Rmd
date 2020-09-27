@@ -29,23 +29,28 @@ Africa <- BRI %>%
 Africa_Avg <- Africa %>%
   group_by(year) %>%
   summarize(usd_current = mean(usd_current, na.rm =TRUE)) %>%
-  mutate(usd_current_avg = usd_current/1000000)
+  mutate(usd_current_avg = usd_current/1000000) %>%
+  round(digits = 2)
 
 Africa_Avg %>%
   ggplot() +
-  geom_point(aes(x = year, y = usd_current_avg), color = "green", size = 3) +
+  geom_point(aes(x = year, y = usd_current_avg), size = 0.5) +
   geom_smooth(aes(x = year, y = usd_current_avg)) +
   scale_x_continuous(breaks = seq(2000, 2014, by = 1)) +
-  scale_y_continuous(breaks = seq(30, 300, by = 50)) +
-  theme(axis.text.x = element_text (face = "bold", size = 10, angle = 45))
+  #scale_y_continuous(breaks = seq(30, 300, by = 50)) +
+  theme(axis.text.x = element_text (face = "bold", size = 10, angle = 45))+
+  labs(title = "Average Infrastructure Project Amounts per Year for the Africa Region",
+       subtitle = "Projects dates 2000-2014",
+       caption = "Source: AidData's Global Chinese Official Finance Dataset, 2000-2014, v.1.0",
+       y = "Average Project Amount (million USD)",
+       x ="Year") 
 
 
 ```
 
 
-
 ## Visualization #2 - Asia
-```{r Asia, fig.width = 5, warning = FALSE, message = FALSE}
+```{r Asia, fig.width = 10, fig.asp = 0.8, warning = FALSE, message = FALSE}
 
 Asia <- BRI %>%
   select(year, recipient_region, usd_current) %>%
@@ -56,23 +61,26 @@ Asia <- BRI %>%
 Asia_Avg <- Asia %>%
   group_by(year) %>%
   summarize(usd_current = mean(usd_current, na.rm =TRUE)) %>% 
-  mutate(usd_current_avg = usd_current/1000000)
-
-
+  mutate(usd_current_avg = usd_current/1000000) %>%
+  round(digits = 2)
+  
 ggplot(Asia_Avg, aes(year, usd_current_avg)) +
-  geom_col(aes(fill = usd_current_avg, position = "dodge")) +
-  geom_text(aes(label = usd_current_avg), position = position_dodge(0.1)) +
+  geom_col(aes(fill = usd_current_avg, position = "dodge"), fill = "purple") +
+  geom_text(aes(label = usd_current_avg), position = position_dodge(0.2)) +
   scale_x_continuous(breaks = seq(2000, 2014, by = 1)) +
   scale_y_continuous(breaks = seq(20, 500, by = 50)) +
-  theme(axis.text.x = element_text (face = "bold", size = 10, angle = 45))
+  theme(axis.text.x = element_text (face = "bold", size = 10, angle = 45)) +
+  labs(title = "Average Infrastructure Project Amounts per Year for the Asia Region",
+       subtitle = "projects dates 2000-2014",
+       caption = "Source: AidData's Global Chinese Official Finance Dataset, 2000-2014, v.1.0",
+       y = "Average Project Amount (million USD)",
+       x ="Year") 
 
 ```
 
 
-
-
 ## Visualization #3 - The Middle East
-```{r The Middle East}
+```{r The Middle East, warning = FALSE, message = FALSE}
 
 Middle_East <- BRI %>% 
   select(year, recipient_region, usd_current) %>%
@@ -80,9 +88,26 @@ Middle_East <- BRI %>%
   arrange(year) %>%
   select(year, usd_current)
 
+The_MidEast_Avg <- Middle_East %>%
+  group_by(year) %>%
+  summarize(usd_current = sum(usd_current, na.rm =TRUE)) %>%
+  mutate(usd_current2 = usd_current/1000000) 
+  round(digits = 2)
 
 ```
-
+  ggplot() +
+  geom_bar(aes(x = year, y = usd_current2), color = "blue", shape = "triangle") +
+  geom_point(aes(x = year, y = usd_current2)) +
+  scale_x_continuous(breaks = seq(2000, 2014, by = 1)) +
+  #scale_y_continuous(breaks = seq(700, 77000, by = 7000)) +
+  theme(axis.text.x = element_text (face = "bold", size = 10, angle = 45)) +
+  labs(title = "Average Infrastructure Project Amounts per Year for the Middle East Region",
+       subtitle = "projects dates 2000-2014",
+       caption = "Source: AidData's Global Chinese Official Finance Dataset, 2000-2014, v.1.0",
+       y = "Average Project Amount (million USD)",
+       x ="Year") 
+       
+       
 
 ## Visualization #4 - The Pacific 
 
@@ -97,17 +122,48 @@ The_Pacific <- BRI %>%
 The_Pacific_Avg <- The_Pacific %>%
   group_by(year) %>%
   summarize(usd_current = sum(usd_current, na.rm =TRUE)) %>%
-  mutate(usd_current2 = usd_current/100000) 
+  mutate(usd_current2 = usd_current/100000) %>%
+  round(digits = 2)
 
 The_Pacific_Avg %>%
   ggplot() +
-  geom_line(aes(x = year, y = usd_current2), color = "blue", shape = "triangle") +
-  geom_point(aes(x = year, y = usd_current2)) +
+  geom_line(aes(x = year, y = usd_current2), color = "blue") +
+  geom_point(aes(x = year, y = usd_current2), shape = "triangle") +
   scale_x_continuous(breaks = seq(2000, 2014, by = 1)) +
   #scale_y_continuous(breaks = seq(700, 77000, by = 7000)) +
-  theme(axis.text.x = element_text (face = "bold", size = 10, angle = 45))
+  theme(axis.text.x = element_text (face = "bold", size = 10, angle = 45))+
+    labs(title = "Average Infrastructure Project Amounts per Year for the Pacific   Region",
+       subtitle = "projects dates 2000-2014",
+       caption = "Source: AidData's Global Chinese Official Finance Dataset, 2000-2014, v.1.0",
+       y = "Average Project Amount (million USD)",
+       x ="Year") 
 
-#how to scale this accurately#
 ```
 
+## Visualization #5 - All Regions
 
+``` {r all regions, fig.width = 10, fig.asp = 0.8,  warning = FALSE, message = FALSE }
+
+BRI_regions <- BRI %>%
+  select(recipient_region, usd_current, year) %>%
+  arrange(recipient_region, year)
+ 
+BRI_regions_avg <- BRI_regions %>%
+  group_by(recipient_region, year) %>%
+  summarize(usd_current = mean(usd_current, na.rm = TRUE)) %>%
+  mutate(usd_current = usd_current/1000000)
+
+BRI_regions_avg %>%
+  ggplot() +
+  geom_line(aes(x = year, y = usd_current, color = recipient_region)) +
+  geom_point(aes(x = year, y = usd_current, shape = "diamond"), fill = "black")+
+  scale_x_continuous(breaks = seq(2000, 2014, by =1)) +
+  scale_y_continuous("usd_current") +
+  theme(axis.text.x = element_text (face = "bold", size = 10, angle = 45))+
+  labs(title = "Average Infrastructure Project Amounts per Year per Region",
+       subtitle = "projects dates 2000-2014",
+       caption = "Source: AidData's Global Chinese Official Finance Dataset, 2000-2014, v.1.0",
+       y = "Average Project Amount (million USD)",
+       x ="Year") 
+ 
+```
